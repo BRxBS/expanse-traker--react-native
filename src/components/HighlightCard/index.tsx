@@ -3,29 +3,44 @@ import { Feather } from '@expo/vector-icons';
 import { 
     Container,
     Header,
-    TiTle,
+    Title,
     Footer,
     Amount,
     LastTransaction,
     Icon
 
  } from "./styles";
- import { StatusBar, Text, View } from 'react-native';
 
- export function HighlightCard(){
+ interface Props {
+    type: "up" | "down" | "total";
+    title: string;
+    amount: string;
+    lastTransaction: string;
+  }
+  
+  const icon = {
+    up: "arrow-up-circle",
+    down: "arrow-down-circle",
+    total: "dollar-sign",
+  };
+
+ export function HighlightCard({
+  type,
+  title,
+  amount,
+  lastTransaction,
+}: Props){
     return (
-        <Container>
-            <Header>
-                <TiTle>Entrada</TiTle>
-                <Icon name='arrow-up-circle'/>
-            </Header>
-            <Footer>
-                <Amount>R$ 10000.00 </Amount>
-                <LastTransaction>
-                    última entrada dia 13 de abril
-                </LastTransaction>
-            </Footer>
-        </Container>
+        <Container type={type}>
+        <Header>
+          <Title type={type}>{title}</Title>
+          <Icon name={icon[type]} type={type} />
+        </Header>
+        <Footer>
+          <Amount type={type}>{amount}</Amount>
+          <LastTransaction type={type}>{lastTransaction}</LastTransaction>
+        </Footer>
+      </Container>
 
 
     )
