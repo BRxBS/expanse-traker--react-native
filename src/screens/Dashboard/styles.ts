@@ -1,10 +1,13 @@
 import styled from "styled-components/native";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { Entypo } from '@expo/vector-icons'; 
+import { FlatList } from 'react-native';
+import { DataListProps } from "./Dashboard";
+
 
 
 export const Container = styled.View`
-flex: 1;
+
 background-color: ${({theme}) => theme.colors.background};
 height: 100%;
 width: 100%
@@ -13,7 +16,7 @@ width: 100%
 
 export const Header = styled.View`
 width: 100%;
-height: ${RFPercentage(40)}px;
+height: ${RFPercentage(38)}px;
 
 background-color: ${({theme}) => theme.colors.primary};
 
@@ -25,7 +28,7 @@ flex-direction: row;
 export const UserWrapper = styled.View `
 width: 100%;
 padding: 0 24px;
-margin-top: 30px;
+margin-top: 20px;
 
 flex-direction: row;
 justify-content: space-between;
@@ -74,11 +77,25 @@ font-family: ${({theme}) => theme.fonts.bold};
 export const HighlightCards = styled.ScrollView.attrs({
     horizontal: true,
     showsHorizontalScrollIndicator: false,
-    contentContainerStyle: {paddingHorizontal: 24},
+    contentContainerStyle: {paddingHorizontal: 14},
 })`
 width: 100%;
 
 position: absolute;
-margin-top:  ${RFPercentage(18)}px;
+margin-top:  ${RFPercentage(16)}px;
 
 `
+export const Transactions = styled.View`
+flex: 1%;
+padding: 0 22px;
+margin-top: ${RFPercentage(10)}px;
+
+`
+export const Title = styled.Text`
+font-size:   ${RFValue(20)}px;
+font-family: ${({theme}) => theme.fonts.medium}; 
+
+`
+export const TransacionList = styled(FlatList as new () => FlatList<DataListProps>).attrs({
+  //showsVerticalScrollIndicator: false,
+})``;
