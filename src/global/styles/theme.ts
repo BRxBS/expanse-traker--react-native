@@ -9,7 +9,7 @@ export default{
         success_light: 'rgba(37, 125, 76, 0.3)',
 
         attention: '#7D252A',
-        attention_light: 'rgb(125, 37, 42, 0.3)',
+        attention_light: 'rgba(125, 37, 42, 0.3)',
 
         shape: '#ffffff',
         title: '#252A7D',
