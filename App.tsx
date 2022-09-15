@@ -13,8 +13,9 @@ import {
  } from '@expo-google-fonts/poppins';
 
 import theme from './src/global/styles/theme'
-import { Dashboard } from './src/screens/Dashboard/Dashboard';
-import { HighlightCard } from './src/components/HighlightCard';
+//import { Dashboard } from './src/screens/Dashboard/Dashboard';
+import {Register} from './src/screens/Register/index'
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -66,7 +67,7 @@ export default function App() {
           <View
       onLayout={onLayoutRootView}>
       <StatusBar barStyle = 'dark-content' hidden = {false} backgroundColor = "#FD98CF" />
-      <Dashboard/>
+      <Register/>
 
     </View>
     </ThemeProvider>
