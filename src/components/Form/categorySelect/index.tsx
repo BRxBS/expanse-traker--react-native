@@ -1,6 +1,4 @@
 import React from "react";
-import { TextInputProps } from "react-native";
-import { Feather } from '@expo/vector-icons';
 
 
 import {
@@ -10,13 +8,15 @@ import {
     
 } from './styles'
 
-type Props = TextInputProps;
+interface Props{
+    title: string;
+}
 
-export function CategorySelect(){
+export function CategorySelect({title}: Props){
     return(
         <>
         <Container >
-            <Category></Category>
+            <Category>Categoria</Category>
             <Icon name='chevron-down'/>
         </Container>
         </>
