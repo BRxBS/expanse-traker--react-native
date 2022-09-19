@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Input } from "../../components/Form/input";
 import { Button } from "../../components/Form/button";
 import { TransactionTypeButton } from "../../components/Form/TransactionTypeButton";
-import { CategorySelect } from "../../components/Form/categorySelect"; 
+import { CategorySelectButton } from "../../components/Form/CategorySelectButton";
 
 import {
     Container,
@@ -16,6 +16,7 @@ import {
     Fild,
     TransactionsTypes
 } from './styles'
+import { CategorySelect } from "../CategorySelect";
 
 
 export function Register(){
@@ -41,14 +42,7 @@ export function Register(){
         setCategoryModalOpen(false);
       }
 
-      function handleRegister(){
-        const data ={
-            name,
-            amount,
-            transactionType,
-            category: category.key
-        }
-      }
+      
     return(
         <>
         <Container>
@@ -82,14 +76,13 @@ export function Register(){
 
         <CategorySelectButton 
         title={category.name}
-        onpress={handleOpenSelectCategoryModal}
+        onPress={handleOpenSelectCategoryModal}
         />
 
   
             </Fild>
 
-            <Button title="Enviar"
-            onPress={handleRegister}/>
+            <Button title="Enviar"/>
             </Form>
             
             <Modal visible={categoryModalOpen}>
