@@ -60,9 +60,9 @@ font-size:  ${RFValue(14)}px;
 
 export const Separator = styled.View`
 height: 1.5px;
-margin: 0 5%;
 
-background-color:  ${({theme}) => theme.colors.text};
+
+background-color: #c8cee3;
 
 `
 export const Footer = styled.View`
