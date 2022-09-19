@@ -7,13 +7,14 @@ import {
 } from './styles'
 
 interface Props extends TouchableOpacityProps{
- title: string
+ title: string,
+ onPress: () => void;
 };
 
-export function Button({title} : Props){
+export function Button({title, onPress, ...rest } : Props){
     return(
         <>
-        <Container >
+        <Container onPress={onPress} {...rest} >
             <Title>{title}</Title>
         </Container>
         </>
