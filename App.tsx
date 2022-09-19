@@ -14,8 +14,8 @@ import {
 
 import theme from './src/global/styles/theme'
 //import { Dashboard } from './src/screens/Dashboard/Dashboard';
-//import {Register} from './src/screens/Register/index'
-import {CategorySelect} from './src/screens/CategorySelect/index'
+import {Register} from './src/screens/Register/index'
+//import {CategorySelect} from './src/screens/CategorySelect/index'
 
 
 SplashScreen.preventAutoHideAsync();
@@ -68,7 +68,7 @@ export default function App() {
           <View
       onLayout={onLayoutRootView}>
       <StatusBar barStyle = 'dark-content' hidden = {false} backgroundColor = "#FD98CF" />
-      <CategorySelect/>
+      <Register/>
 
     </View>
     </ThemeProvider>
