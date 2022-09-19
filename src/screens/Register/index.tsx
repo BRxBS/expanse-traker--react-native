@@ -1,9 +1,14 @@
 import React, {useState} from "react";
-import { Modal } from "react-native";
+import { Modal, 
+        TouchableWithoutFeedback,
+        Keyboard,
+        Alert } from "react-native";
+import { useForm } from 'react-hook-form'
+import * as yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigation } from "@react-navigation/native";
 
-
-import { Input } from "../../components/Form/input";
+import { InputFormHook } from "../../components/Form/inputFormHook";
 import { Button } from "../../components/Form/button";
 import { TransactionTypeButton } from "../../components/Form/TransactionTypeButton";
 import { CategorySelectButton } from "../../components/Form/CategorySelectButton";
@@ -18,11 +23,28 @@ import {
 } from './styles'
 import { CategorySelect } from "../CategorySelect";
 
+interface FormData {
+  name: string;
+  amount: string
+}
+
+const schema = yup.object().shape({
+  name: yup.string().required('Nome é obrigatorio'),
+  amount: yup.number().typeError('Informe um valor númerico').positive('O valor não pode ser negativo')
+})
 
 export function Register(){
 
     const [transactionType, setTransactionType] = useState('');
     const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
+
+    const {
+      control,
+      handleSubmit,
+      formState: {errors}
+    } = useForm({
+      resolver: yupResolver(schema)
+    });
 
 
     const [category, setCategory] = useState({
@@ -42,9 +64,26 @@ export function Register(){
         setCategoryModalOpen(false);
       }
 
+      function handleRegister(form: FormData): void{
+        if(!transactionType)
+        return Alert.alert("Selecione o tipo da transação ")
+
+        if(category.key === 'category')
+        return Alert.alert("Selecione a categoris!")
+
+
+        const data = {
+          name: form.name,
+          amount: form.amount,
+          transactionType,
+          category: category.key
+        }
+        console.log(data)
+      }
       
     return(
         <>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Container>
             <Header>
                 <Title>
@@ -53,10 +92,24 @@ export function Register(){
             </Header>
             <Form>
             <Fild>
-            <Input
-        placeholder="Nome"/>
-             <Input
-        placeholder="Valor"/>
+
+            <InputFormHook
+            name='name'
+            control={control}
+            placeholder='Nome'
+            autoCapitalize="sentences"
+            autoCorrect={false}
+            error={errors.name?.message}
+            />
+
+            <InputFormHook
+            name='amount'
+            control={control}
+            placeholder='Valor'
+            keyboardType="numeric"
+            error={errors.amount?.message}
+            />
+
 
         <TransactionsTypes>
         <TransactionTypeButton
@@ -82,10 +135,11 @@ export function Register(){
   
             </Fild>
 
-            <Button title="Enviar"/>
+            <Button title="Enviar" onPress={handleSubmit(handleRegister)}/>
             </Form>
             
             <Modal visible={categoryModalOpen}>
+             
           <CategorySelect
             category={category}
             setCategory={setCategory}
@@ -93,6 +147,7 @@ export function Register(){
           />
         </Modal>
         </Container>
+        </TouchableWithoutFeedback>
         </>
     )
 }
