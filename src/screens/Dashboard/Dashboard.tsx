@@ -12,7 +12,6 @@ import {
     Icon,
     Transactions,
     Title,
-    TransacionList,
 
 
  } from "./styles";
