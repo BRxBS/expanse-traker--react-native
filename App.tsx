@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StatusBar, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import Entypo from '@expo/vector-icons/Entypo';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { ThemeProvider } from 'styled-components';
+
 
 import { 
   useFonts,
@@ -13,10 +15,8 @@ import {
  } from '@expo-google-fonts/poppins';
 
 import theme from './src/global/styles/theme'
-//import { Dashboard } from './src/screens/Dashboard/Dashboard';
-import {Register} from './src/screens/Register/index'
-//import {CategorySelect} from './src/screens/CategorySelect/index'
-
+import { Dashboard } from './src/screens/Dashboard/Dashboard';
+import {AppRoutes} from './src/routes/app.routes'
 
 SplashScreen.preventAutoHideAsync();
 
@@ -65,12 +65,17 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-          <View
-      onLayout={onLayoutRootView}>
-      <StatusBar barStyle = 'dark-content' hidden = {false} backgroundColor = "#FD98CF" />
-      <Register/>
+        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+    <StatusBar barStyle = 'dark-content' hidden = {false} backgroundColor = "#FD98CF" />
+      <NavigationContainer>
+      <AppRoutes/>
+      </NavigationContainer>
 
-    </View>
+        </View>
+
+
+
+
     </ThemeProvider>
 
   );
