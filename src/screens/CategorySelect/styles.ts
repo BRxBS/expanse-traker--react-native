@@ -12,7 +12,6 @@ interface CategoryProps {
 export const Container = styled(GestureHandlerRootView)`
 background-color:${({theme}) => theme.colors.shape};
 
-
 `;
 
 export const Header = styled.View`
@@ -26,7 +25,6 @@ padding-bottom: 19px;
   
   `;
 
-  
 export const Title = styled.Text`
 font-family: ${({theme}) => theme.fonts.regular};
 color: ${({theme}) => theme.colors.shape};
@@ -49,7 +47,6 @@ background-color: ${({ isActive, theme }) => isActive ? theme.colors.secundary :
 export const Icon = styled(Feather)`
  font-size: ${RFValue(20)}px;
  margin-right: 14px;
-
 
 `;
 
