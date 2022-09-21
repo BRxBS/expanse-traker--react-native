@@ -147,7 +147,7 @@ export function Dashboard(){
                 <HighlightCard 
                 type='total'
                  title="Total"
-                 amount='0'
+                 amount={highlightData.total.amount}
                 lastTransaction="01 á 16 de abril"/>
                 
             </HighlightCards>
