@@ -108,6 +108,7 @@ export function Dashboard(){
 
     useEffect(() => {
         loadTransactions()
+
     }, [])
 
     useFocusEffect(useCallback(() => {
@@ -137,17 +138,17 @@ export function Dashboard(){
                 <HighlightCard
                 type='up'
                 title="Entrada"
-                amount='0'
+                amount={highlightData?.entries?.amount} //optional chaning
                 lastTransaction="Ultima entrada dia 13 de abril" />
                 <HighlightCard 
                  type='down'
-                 title='Saídas'
-                 amount='0'
+                 title= 'Saídas'
+                 amount={highlightData?.expensives?.amount}
                 lastTransaction="Ultima entrada dia 10 de abril"/>
                 <HighlightCard 
                 type='total'
-                 title="Total"
-                 amount={highlightData.total.amount}
+                title="Total"
+                amount={highlightData?.total?.amount}
                 lastTransaction="01 á 16 de abril"/>
                 
             </HighlightCards>
