@@ -1,11 +1,13 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { Modal, 
         TouchableWithoutFeedback,
         Keyboard,
         Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useForm } from 'react-hook-form'
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup'
+import uuid from 'react-native-uuid'
 import { useNavigation } from "@react-navigation/native";
 
 import { InputFormHook } from "../../components/Form/inputFormHook";
@@ -38,9 +40,14 @@ export function Register(){
     const [transactionType, setTransactionType] = useState('');
     const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
 
+    const dataKey = '@finance:transactions';
+
+    const navigation = useNavigation()
+
     const {
       control,
       handleSubmit,
+      reset,
       formState: {errors}
     } = useForm({
       resolver: yupResolver(schema)
@@ -64,7 +71,7 @@ export function Register(){
         setCategoryModalOpen(false);
       }
 
-      function handleRegister(form: FormData): void{
+async  function handleRegister(form: FormData): Promise<void>{
         if(!transactionType)
         return Alert.alert("Selecione o tipo da transação ")
 
@@ -72,13 +79,39 @@ export function Register(){
         return Alert.alert("Selecione a categoris!")
 
 
-        const data = {
+        const newTransaction = {
+          key: String(uuid.v4()),
           name: form.name,
           amount: form.amount,
           transactionType,
-          category: category.key
+          category: category.key,
+          date: new Date()
         }
-        console.log(data)
+        try{
+          const data = await AsyncStorage.getItem(dataKey)
+          const currentData = data ? JSON.parse(data) : [];
+
+          const dataFormatted = [
+            ...currentData,
+            newTransaction,
+          ]
+          
+          await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted))
+         
+          //to clean the input filds
+          reset()
+          setTransactionType(''),
+          setCategory({
+            key: "category",
+            name: "Categoria",
+          })
+     
+
+
+        }catch(error) {
+          console.log("erro em salvar transação", error);
+          Alert.alert("Não foi possível salvar")
+        }
       }
       
     return(
@@ -129,7 +162,7 @@ export function Register(){
 
         <CategorySelectButton 
         title={category.name}
-        onPress={handleOpenSelectCategoryModal}
+        onPress={() => { navigation.goBack(); handleOpenSelectCategoryModal}}
         />
 
   
