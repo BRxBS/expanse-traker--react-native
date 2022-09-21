@@ -90,12 +90,11 @@ flex: 1%;
 padding: 0 22px;
 margin-top: ${RFPercentage(10)}px;
 
+
 `
 export const Title = styled.Text`
 font-size:   ${RFValue(20)}px;
 font-family: ${({theme}) => theme.fonts.medium}; 
+margin-bottom: ${RFPercentage(1)}px;
 
 `
-export const TransacionList = styled(FlatList as new () => FlatList<DataListProps>).attrs({
-  //showsVerticalScrollIndicator: false,
-})``;
