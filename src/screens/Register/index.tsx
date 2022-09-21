@@ -59,7 +59,7 @@ export function Register(){
         name: "Categoria",
       });
 
-      function handleTransactionTypeSelect(type: "up" | "down"){
+      function handleTransactionTypeSelect(type: "positive" | "negative"){
         setTransactionType(type)
       }
 
@@ -83,11 +83,12 @@ async  function handleRegister(form: FormData): Promise<void>{
           key: String(uuid.v4()),
           name: form.name,
           amount: form.amount,
-          transactionType,
+          type: transactionType,
           category: category.key,
           date: new Date()
         }
         try{
+
           const data = await AsyncStorage.getItem(dataKey)
           const currentData = data ? JSON.parse(data) : [];
 
@@ -105,6 +106,7 @@ async  function handleRegister(form: FormData): Promise<void>{
             key: "category",
             name: "Categoria",
           })
+          navigation.navigate('Listagem')
      
 
 
@@ -113,6 +115,13 @@ async  function handleRegister(form: FormData): Promise<void>{
           Alert.alert("Não foi possível salvar")
         }
       }
+      useEffect(() => {
+        async function loadData(){
+          const data = await AsyncStorage.getItem(dataKey)
+          console.log('JSON.parse(data!)', JSON.parse(data!))
+        }
+        loadData()
+      })
       
     return(
         <>
@@ -148,21 +157,21 @@ async  function handleRegister(form: FormData): Promise<void>{
         <TransactionTypeButton
       title='Chegando'
         type='up' 
-        onPress={() => handleTransactionTypeSelect('up')}
-        isActive={transactionType === 'up'}
+        onPress={() => handleTransactionTypeSelect("positive")}
+        isActive={transactionType === 'positive'}
         
         />
         <TransactionTypeButton
       title='Saindo'
         type='down'
-        onPress={() => handleTransactionTypeSelect('down')}
-        isActive={transactionType === 'down'}
+        onPress={() => handleTransactionTypeSelect( "negative")}
+        isActive={transactionType === 'negative'}
         />
         </TransactionsTypes>
 
         <CategorySelectButton 
         title={category.name}
-        onPress={() => { navigation.goBack(); handleOpenSelectCategoryModal}}
+        onPress={handleOpenSelectCategoryModal}
         />
 
   
