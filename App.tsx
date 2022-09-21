@@ -1,3 +1,5 @@
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR'
 import React, { useCallback, useEffect, useState } from 'react';
 import { StatusBar, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
