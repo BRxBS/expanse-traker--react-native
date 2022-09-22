@@ -1,9 +1,6 @@
 import styled from "styled-components/native";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { Entypo } from '@expo/vector-icons'; 
-import { FlatList } from 'react-native';
-import { DataListProps } from "./Dashboard";
-
 
 
 export const Container = styled.View`
@@ -96,5 +93,8 @@ export const Title = styled.Text`
 font-size:   ${RFValue(20)}px;
 font-family: ${({theme}) => theme.fonts.medium}; 
 margin-bottom: ${RFPercentage(1)}px;
+
+`
+export const LoadingCont = styled.View`
 
 `
