@@ -7,10 +7,9 @@ interface Props {
    
 
 export const Container = styled.View<Props>`
-width: 90%;
 padding: 13px 24px;
-margin-bottom: 0px;
-margin: 0  5%;
+
+margin-bottom: 20px;
 background-color:  ${({theme}) => theme.colors.shape}; 
 
 flex-direction: row;
