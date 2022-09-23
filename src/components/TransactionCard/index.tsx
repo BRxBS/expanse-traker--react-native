@@ -9,7 +9,7 @@ import {
      Amount,
      CategoryName,
      Date,
-     Wrapper
+     Category
  
  } from "./styles";
 
@@ -29,9 +29,9 @@ data: TransactionCardProps
 
 
 
- export function TransactionCard({data}: Props){
+ export function TransactionCard({data}: Props): JSX.Element{
     const [ category ] = categorias.filter(
-        item => item.key === data.category
+        (item) => item.key === data.category
     );
     
     return(
@@ -45,12 +45,12 @@ data: TransactionCardProps
 
             <Footer>
          
-                <Wrapper>
+                <Category>
                 <Icon name={category.icon}/>
                  <CategoryName>{category.name}</CategoryName>
-                </Wrapper>
+                </Category>
  
-                    <Date>{data.date}</Date>
+                <Date>{data.date}</Date>
       
             </Footer>
         </Container>

@@ -53,7 +53,7 @@ font-size: ${RFValue(14)}px;
 color: ${({theme}) => theme.colors.text};
 
 `
-export const Wrapper = styled.View`
+export const Category = styled.View`
 flex-direction:  row;
 align-items: center;
 `
