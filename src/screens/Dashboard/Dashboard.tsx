@@ -80,34 +80,35 @@ export function Dashboard(){
         let entriesTotal = 0;
         let expensiveTotal = 0;
  
-        const transactionFormatted: DataListProps[] = transactions.map((item: DataListProps) => {
+        const transactionFormatted: DataListProps[] = transactions
+        .map(({ amount, date, id, name, type, category }: DataListProps) => {
             
-            if(item.type === 'positive'){
-                entriesTotal += Number(item.amount);
+            if(type === 'positive'){
+                entriesTotal += Number(amount);
 
             }else{
-                expensiveTotal += Number(item.amount)
+                expensiveTotal += Number(amount)
             }
             
-            const amount = Number(item.amount).toLocaleString('pt-BR', {
+            const amountFormatted = Number(amount).toLocaleString('pt-BR', {
                 style: 'currency',
                 currency: 'BRL'
             });
  
-            const date = Intl.DateTimeFormat('pt-BR', {
+            const dateFormatted = Intl.DateTimeFormat('pt-BR', {
                 day: '2-digit',
                 month: '2-digit',
                 year: '2-digit'
-            }).format(new Date(item.date))
+            }).format(new Date(date))
 
             return{
                 
-                id: item.id,
-                name: item.name,
-                amount,
-                type: item.type,
-                category: item.category,
-                date,
+                id,
+                name,
+                amount: amountFormatted,
+                date: dateFormatted,
+                type,
+                category,
 
             }
         })
@@ -163,11 +164,8 @@ export function Dashboard(){
     }
   
     console.log('HighlightData,', highlightData)
+    console.log('transaction,', transaction)
 
-    useEffect(() => {
-        loadTransactions()
-
-    }, [])
 
     useFocusEffect(useCallback(() => {
         loadTransactions()
@@ -200,6 +198,11 @@ export function Dashboard(){
       
             <HighlightCards
             >
+               <HighlightCard 
+                type='total'
+                title="Total"
+                amount={highlightData?.total?.amount}
+                lastTransaction={highlightData.total.lastTransaction} />
                 <HighlightCard
                 type='up'
                 title="Entrada"
@@ -210,11 +213,7 @@ export function Dashboard(){
                  title= 'Saídas'
                  amount={highlightData?.expensives?.amount}
                 lastTransaction={highlightData.expensives.lastTransaction} />
-                <HighlightCard 
-                type='total'
-                title="Total"
-                amount={highlightData?.total?.amount}
-                lastTransaction={highlightData.total.lastTransaction} />
+
                 
             </HighlightCards>
 
@@ -223,9 +222,9 @@ export function Dashboard(){
                 Listagem 
             </Title>
 
-            
             <FlatList
                         data={transaction}
+                        keyExtractor={(item) => String(item.id)}
                         renderItem={({item}) => <TransactionCard data={item} />}
                         showsVerticalScrollIndicator= {false}
                        
