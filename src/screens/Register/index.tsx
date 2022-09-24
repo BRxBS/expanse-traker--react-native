@@ -31,8 +31,12 @@ interface FormData {
 }
 
 const schema = yup.object().shape({
-  name: yup.string().required('Nome é obrigatorio'),
-  amount: yup.number().typeError('Informe um valor númerico').positive('O valor não pode ser negativo')
+  name: yup.string()
+  .required('Nome é obrigatorio'),
+  amount: yup.number()
+  .typeError('Informe um valor númerico')
+  .positive('O valor não pode ser negativo')
+  .required('Nome é obrigatorio'),
 })
 
 export function Register(){
@@ -40,7 +44,7 @@ export function Register(){
     const [transactionType, setTransactionType] = useState('');
     const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
 
-    const dataKey = '@finance:transactions';
+
 
     const navigation = useNavigation()
 
@@ -71,31 +75,29 @@ export function Register(){
         setCategoryModalOpen(false);
       }
 
-async  function handleRegister(form: FormData): Promise<void>{
+async  function handleRegister({ name, amount }: FormData){
+        const dataKey = '@finance:transactions';
         if(!transactionType)
-        return Alert.alert("Selecione o tipo da transação ")
+        return Alert.alert("Selecione o tipo da transação")
 
         if(category.key === 'category')
-        return Alert.alert("Selecione a categoris!")
+        return Alert.alert("Selecione a categoria")
 
 
         const newTransaction = {
-          key: String(uuid.v4()),
-          name: form.name,
-          amount: form.amount,
+          id: String(uuid.v4()),
+          name,
+          amount,
           type: transactionType,
           category: category.key,
           date: new Date()
-        }
+        };
+
         try{
 
           const data = await AsyncStorage.getItem(dataKey)
           const currentData = data ? JSON.parse(data) : [];
-
-          const dataFormatted = [
-            ...currentData,
-            newTransaction,
-          ]
+          const dataFormatted = [  ...currentData, newTransaction]
           
           await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted))
          
@@ -108,20 +110,13 @@ async  function handleRegister(form: FormData): Promise<void>{
           })
           navigation.navigate('Listagem')
      
-
-
         }catch(error) {
           console.log("erro em salvar transação", error);
           Alert.alert("Não foi possível salvar")
         }
       }
-      useEffect(() => {
-        async function loadData(){
-          const data = await AsyncStorage.getItem(dataKey)
-          console.log('JSON.parse(data!)', JSON.parse(data!))
-        }
-        loadData()
-      })
+
+
       
     return(
         <>
