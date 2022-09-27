@@ -10,14 +10,15 @@ import {
 
 interface PropsSignIn extends TouchableOpacityProps{
     title: string,
-    svg: React.FC<SvgProps>
+    svg: React.FC<SvgProps>,
+    onPress: () => void;
    };
 
 
-export function SignInButton({title, svg: Svg, ...rest } : PropsSignIn){
+export function SignInButton({title, svg: Svg, onPress, ...rest } : PropsSignIn){
     return(
         <>
-        <Button {...rest}>
+        <Button  onPress={onPress} {...rest}>
             <ImageContainer>
                 <Svg/>
             </ImageContainer>
