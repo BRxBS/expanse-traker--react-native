@@ -17,7 +17,7 @@ import {
  } from '@expo-google-fonts/poppins';
 
 import theme from './src/global/styles/theme'
-import { Dashboard } from './src/screens/Dashboard/Dashboard';
+import {  SignIn} from './src/screens/SignIn/index';
 import {AppRoutes} from './src/routes/app.routes'
 
 SplashScreen.preventAutoHideAsync();
@@ -69,9 +69,10 @@ export default function App() {
     <ThemeProvider theme={theme}>
         <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
     <StatusBar barStyle = 'dark-content' hidden = {false} backgroundColor = "#FD98CF" />
-      <NavigationContainer>
+      {/* <NavigationContainer>
       <AppRoutes/>
-      </NavigationContainer>
+      </NavigationContainer> */}
+       <SignIn/>
 
         </View>
 
