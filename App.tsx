@@ -2,7 +2,6 @@ import 'intl';
 import 'intl/locale-data/jsonp/pt-BR'
 import React, { useCallback, useEffect, useState } from 'react';
 import { StatusBar, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import Entypo from '@expo/vector-icons/Entypo';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
@@ -18,6 +17,7 @@ import {
 
 import theme from './src/global/styles/theme'
 import {  SignIn} from './src/screens/SignIn/index';
+import { AuthProvider } from './src/hooks/auth';
 import {AppRoutes} from './src/routes/app.routes'
 
 SplashScreen.preventAutoHideAsync();
@@ -72,7 +72,10 @@ export default function App() {
       {/* <NavigationContainer>
       <AppRoutes/>
       </NavigationContainer> */}
-       <SignIn/>
+      <AuthProvider>
+      <SignIn/>
+      </AuthProvider>
+
 
         </View>
 
