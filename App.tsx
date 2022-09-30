@@ -70,12 +70,12 @@ export default function App() {
     <ThemeProvider theme={theme}>
         <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
     <StatusBar barStyle = 'dark-content' hidden = {false} backgroundColor = "#FD98CF" />
-      <NavigationContainer>
+      {/* <NavigationContainer>
       <AppRoutes/>
-      </NavigationContainer>
-      {/* <AuthProvider>
+      </NavigationContainer> */}
+      <AuthProvider>
       <SignIn/>
-      </AuthProvider> */}
+      </AuthProvider>
 
 
         </View>
