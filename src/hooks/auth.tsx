@@ -1,6 +1,8 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import * as AuthSession from 'expo-auth-session';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// const {CLIENT_ID} = process.env
+// const {REDIRECT_URI} = process.env
 
 type AuthResponse = {
     params: {
@@ -9,14 +11,17 @@ type AuthResponse = {
     };
     type: string
 }
+type Param ={
+    token: string
+}
 
 interface TransactionsProviderProps{
     children: ReactNode
 }
 
-interface User{
+type User = {
     id: string;
-    name: string;
+    given_name: string;
     email: string;
     photo?: string;
 }
@@ -34,33 +39,36 @@ function AuthProvider({children} : TransactionsProviderProps ){
 
 
     async function signInWithGoogle() {
-
-        const CLIENT_ID = '83878190207-ur5m6t4ov5r0cl5od83tjgaisqban1pc.apps.googleusercontent.com'
-        const REDIRECT_URI = 'https://auth.expo.io/@anonymous/finance-f0cf056c-c970-4d3f-8d8d-33f155b37c88'
+        // try{
+            const CLIENT_ID="83878190207-ur5m6t4ov5r0cl5od83tjgaisqban1pc.apps.googleusercontent.com"
+    const REDIRECT_URI="https://auth.expo.io/@anonymous/finance-f0cf056c-c970-4d3f-8d8d-33f155b37c88"
         const RESPONSE_TYPE = 'token'
         const SCOPE = encodeURI('profile email')
 
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`
-        const result = await AuthSession
+       
+        const response = await AuthSession
         .startAsync({ authUrl }) as AuthResponse
+        console.log('response', response)
+
         // console.log('type', type)
         // console.log('params', params)
 
-        // if(type === 'success'){
-        //     navigation.navigate('Listagem',)
+        
+        // const token = params.access_token
+        // console.log('token', token)
 
-        // }
-      if (result.type === "success") {
-        const userLogged = {
-        //   id: String(result.user.id),
-        //   email: result.user.email!,
-        //   name: result.user.name!,
-        //   photo: result.user.photoUrl!,
-        } as User;
-        setUser(userLogged);
-        // await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
-      }
- 
+    
+        // const response2 = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${response.params.access_token}`)
+            
+        // if (response.type === "success") {
+        //     const userLogged = await response2.json()
+        //     setUser(userLogged);
+        
+        //       }
+        //     } catch (err) {
+        //         console.log('error signInWithGoogle',err)
+        //       }
     }
     
 
