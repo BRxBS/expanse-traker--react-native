@@ -13,19 +13,16 @@ import GoogleLogo from '../../assets/googleLogo.svg'
 import FinançasLogo from '../../assets/FinançasLogo.svg'
 
 
-
 import { RFValue } from "react-native-responsive-fontsize";
 import { SignInButton } from "../../components/SignSocialButton";
 
 import {useAuth} from '../../hooks/auth'
-import { useNavigation } from "@react-navigation/native";
 import { Alert } from "react-native";
 
 interface Props {
  title: string,
 
 };
-
 
 
 export function SignIn(){
