@@ -1,13 +1,16 @@
+import 'react-native-gesture-handler';
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR'
 import React, { useCallback, useEffect, useState } from 'react';
-import { StatusBar, Text, View } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { ThemeProvider } from 'styled-components';
-import { NavigationContainer } from '@react-navigation/native';
+import { Routes } from './src/routes';
 
+import theme from './src/global/styles/theme'
+import { AuthProvider, useAuth } from './src/hooks/auth';
 
 import { 
   useFonts,
@@ -16,10 +19,6 @@ import {
   Poppins_700Bold
  } from '@expo-google-fonts/poppins';
 
-import theme from './src/global/styles/theme'
-import {  SignIn} from './src/screens/SignIn/index';
-import { AuthProvider } from './src/hooks/auth';
-import {AppRoutes} from './src/routes/app.routes'
 
 SplashScreen.preventAutoHideAsync();
 
@@ -30,6 +29,7 @@ export default function App() {
     Poppins_700Bold
   })
 
+  const {userStorageLoading} = useAuth()
   const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function App() {
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
-    if (appIsReady) {
+    if (appIsReady || userStorageLoading) {
       // This tells the splash screen to hide immediately! If we call this after
       // `setAppIsReady`, then we may see a blank screen while the app is
       // loading its initial state and rendering its first pixels. So instead,
@@ -70,19 +70,12 @@ export default function App() {
     <ThemeProvider theme={theme}>
         <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
     <StatusBar barStyle = 'dark-content' hidden = {false} backgroundColor = "#FD98CF" />
-      {/* <NavigationContainer>
-      <AppRoutes/>
-      </NavigationContainer> */}
+    
       <AuthProvider>
-      <SignIn/>
+      <Routes/>
       </AuthProvider>
 
-
         </View>
-
-
-
-
     </ThemeProvider>
 
   );
