@@ -24,6 +24,7 @@ import {
 
 import {HistoryCard} from '../../components/HistoryCard/index'
 import { categorias } from "../../utils/categorias";
+import { useAuth } from "../../hooks/auth";
 
 
 
@@ -54,6 +55,7 @@ interface CategoryData{
     const [isLoading, setIsLoading] = useState(false);
 
     const theme = useTheme()
+    const {user} = useAuth()
 
     function handleDateChange(action: "previous" | "next"){
         if(action === 'next'){
@@ -67,7 +69,7 @@ interface CategoryData{
     async function loadData() {
         setIsLoading(true);
 
-        const dataKey = '@finance:transactions';
+        const dataKey = `@finance:transactions_user:${user.id}`;
         const response = await AsyncStorage.getItem(dataKey);
         const responseFormatted = response ? JSON.parse(response) : [];
     
