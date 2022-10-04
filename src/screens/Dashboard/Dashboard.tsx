@@ -6,11 +6,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useTheme } from "styled-components";
-
+import {useAuth} from '../../hooks/auth'
 import { 
     Container,
     Header,
     UserInfo,
+    LogoutButton,
     Photo,
     User,
     UserGreeting,
@@ -40,15 +41,18 @@ export interface DataListProps extends TransactionCardProps{
   }
 
 export function Dashboard(){
-    const [isLoading, setIsLoadeing] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
     const [transaction, setTransaction] = useState<DataListProps[]>([])
     const [highlightData, setHighlightData] = useState<HighlightDataProps>(
         {} as HighlightDataProps
       );
-
-    const theme = useTheme()
-
-    function getLastTransactionDate(
+      
+      const theme = useTheme()
+      const {user, signOut} = useAuth()
+      
+      const dataKey = `@finance:transactions_user:${user.id}`;
+      
+      function getLastTransactionDate(
         collection: DataListProps[],
         type: "positive" | "negative"
       ) {
@@ -73,9 +77,10 @@ export function Dashboard(){
       }
     
     async function loadTransactions(){
-        const dataKey = '@finance:transactions';
+
         const response = await AsyncStorage.getItem(dataKey)
         const transactions = response ? JSON.parse(response) : [];
+        console.log('response', response)
     
         let entriesTotal = 0;
         let expensiveTotal = 0;
@@ -102,6 +107,7 @@ export function Dashboard(){
             }).format(new Date(date))
 
             return{
+
                 
                 id,
                 name,
@@ -113,6 +119,8 @@ export function Dashboard(){
             }
         })
        setTransaction(transactionFormatted);
+       console.log('transactionFormatted', transactionFormatted)
+       console.log('loadTransactions', loadTransactions)
 
          
        const lastTransactionsEntries = getLastTransactionDate(
@@ -129,42 +137,41 @@ export function Dashboard(){
       ? "Não há transações."
       : `01 a ${lastTransactionsExpensives}`;
 
-
-        const total = entriesTotal - expensiveTotal;
-        setHighlightData({
-            entries: {
-                amount: entriesTotal.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL'
-                }),
-                lastTransaction:
-                lastTransactionsEntries === 0
-                  ? "Nao há transações."
-                  : `Última entrada dia ${lastTransactionsEntries}`,
-            },
-            expensives: {
-                amount: expensiveTotal.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL'
-                }),
-                lastTransaction:
-                lastTransactionsExpensives === 0
-                  ? "Não há transações."
-                  : `Última saída dia ${lastTransactionsExpensives}`,
-            },
-            total: {
-                amount: total.toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL'
-                }),
-                lastTransaction: totalInverval,
-            }
-        })
-        setIsLoadeing(false)
-    }
-  
-    console.log('HighlightData,', highlightData)
-    console.log('transaction,', transaction)
+    const total = entriesTotal - expensiveTotal;
+       
+    setHighlightData({
+      entries: {
+        amount: entriesTotal.toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }),
+        lastTransaction:
+          lastTransactionsEntries === 0
+            ? "Nao há transações."
+            : `Última entrada dia ${lastTransactionsEntries}`,
+      },
+      expensives: {
+        amount: expensiveTotal.toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }),
+        lastTransaction:
+          lastTransactionsExpensives === 0
+            ? "Não há transações."
+            : `Última saída dia ${lastTransactionsExpensives}`,
+      },
+      total: {
+        amount: total.toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }),
+        lastTransaction: totalInverval,
+      },
+    });
+    setIsLoading(false);
+  }
+//    console.log('HighlightData,', highlightData)
+//   console.log('transaction,', transaction)
 
 
     useFocusEffect(useCallback(() => {
@@ -186,13 +193,15 @@ export function Dashboard(){
             <Header>
                 <UserWrapper>
                 <UserInfo>
-                    <Photo source={{uri: 'https://picsum.photos/200' }}/>
+                    <Photo source={{uri: user.picture }}/>
                     <User>
                         <UserGreeting>Olá, </UserGreeting>
-                        <UserName>Name</UserName>
+                        <UserName>{user.given_name}</UserName>
                     </User>
                 </UserInfo>
-                  <Icon name="log-out"/>
+                <LogoutButton onPress={signOut}>
+                <Icon name="log-out"/>
+                </LogoutButton>
                 </UserWrapper>
             </Header>
       

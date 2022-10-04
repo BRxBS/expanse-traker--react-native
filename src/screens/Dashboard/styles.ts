@@ -36,7 +36,9 @@ align-items: center;
 export const UserInfo = styled.View `
     flex-direction: row;
     align-items: center;
-    `;
+`;
+export const LogoutButton = styled.TouchableOpacity`
+`
     
 export const Icon =  styled(Entypo) `
 color: ${({theme}) => theme.colors.text_dark};
