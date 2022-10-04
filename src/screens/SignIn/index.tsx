@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
     Container,
@@ -17,7 +17,7 @@ import { RFValue } from "react-native-responsive-fontsize";
 import { SignInButton } from "../../components/SignSocialButton";
 
 import {useAuth} from '../../hooks/auth'
-import { Alert } from "react-native";
+import { ActivityIndicator, Alert } from "react-native";
 
 interface Props {
  title: string,
@@ -26,15 +26,17 @@ interface Props {
 
 
 export function SignIn(){
+    const [isLoading, setIsLoading] = useState(false)
 
     const {signInWithGoogle} = useAuth()
     async function handleSignInWithGoogle(){
         try{
-            await signInWithGoogle()
+            setIsLoading(true)
+            return await signInWithGoogle()
         }catch(error){
             console.log(error)
             Alert.alert('Não foi possivel conectar a sua conta ')
-            
+            setIsLoading(false)
         }
 
     }
@@ -71,6 +73,13 @@ export function SignIn(){
             />
 
         </FooterWrapper>
+        {isLoading && 
+        <ActivityIndicator
+        color='#7D2556'
+        size="large"
+        style={{marginTop: 18}}
+        />}
+        
         </Footer>
         </Container>
         </>
