@@ -20,7 +20,7 @@ type User = {
     id: string;
     given_name: string;
     email: string;
-    photo?: string;
+    picture: string;
 }
 interface AuthContextData {
     user: User;
@@ -34,7 +34,8 @@ export const AuthContext = createContext({} as AuthContextData);
 function AuthProvider({children} : TransactionsProviderProps ){
     const [user, setUser] = useState<User>({} as User);
     const [userStorageLoading, setUserStorageLoading] = useState(true);
-    const userStorageKey = `@finance:transactions`
+    const userStorageKey = '@finance:user'
+    console.log("userStorageKey", userStorageKey)
 
     async function signInWithGoogle() {
         try{
@@ -50,12 +51,13 @@ function AuthProvider({children} : TransactionsProviderProps ){
         console.log('type', type)
         console.log('params', params)
     
-        const response2 = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`)
-            
+        const response = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${params.access_token}`)
+
         if (type === "success") {
-            const userLogged = await response2.json()
+            const userLogged = await response.json()
             setUser(userLogged);
-            await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
+            await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged))
+
         
               }
             } catch (err) {
@@ -72,6 +74,7 @@ function AuthProvider({children} : TransactionsProviderProps ){
     useEffect(() => {
         async function loadUserStorageData() {
           const userStoraged = await AsyncStorage.getItem(userStorageKey);
+          console.log('userStoraged', userStoraged)
           if (userStoraged) {
             const userLogged = JSON.parse(userStoraged) as User;
             setUser(userLogged);
