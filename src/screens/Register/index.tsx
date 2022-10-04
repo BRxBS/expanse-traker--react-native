@@ -24,6 +24,7 @@ import {
     TransactionsTypes
 } from './styles'
 import { CategorySelect } from "../CategorySelect";
+import { useAuth } from "../../hooks/auth";
 
 interface FormData {
   name: string;
@@ -44,7 +45,7 @@ export function Register(){
     const [transactionType, setTransactionType] = useState('');
     const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
 
-
+    const {user} = useAuth()
 
     const navigation = useNavigation()
 
@@ -76,7 +77,7 @@ export function Register(){
       }
 
 async  function handleRegister({ name, amount }: FormData){
-        const dataKey = '@finance:transactions';
+        const dataKey = `@finance:transactions_user:${user.id}`;
         if(!transactionType)
         return Alert.alert("Selecione o tipo da transação")
 
