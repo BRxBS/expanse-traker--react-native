@@ -7,6 +7,7 @@ import {MaterialIcons} from '@expo/vector-icons'
 import { Dashboard } from "../screens/Dashboard/Dashboard";
 import { Register } from "../screens/Register";
 import { Resume } from "../screens/Resume";
+import { EditScreen } from "../screens/Edit";
 
 const Tab = createBottomTabNavigator();
 
@@ -58,6 +59,21 @@ export function AppRoutes(){
             <Tab.Screen
             name="Resumo"
             component={Resume}
+            options={{
+                tabBarIcon: (({size, color}) => (
+                    <MaterialIcons
+                    name="pie-chart"
+                    size={size}
+                    color={color}
+                    />
+                )),
+                headerShown: false
+            }}
+            />
+            
+            <Tab.Screen
+            name="EditScreen"
+            component={EditScreen}
             options={{
                 tabBarIcon: (({size, color}) => (
                     <MaterialIcons
