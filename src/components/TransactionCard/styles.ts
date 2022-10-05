@@ -1,5 +1,6 @@
 import styled from "styled-components/native";
 import { Feather } from '@expo/vector-icons'; 
+import { SimpleLineIcons } from '@expo/vector-icons'; 
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 //${RFValue(14)}px;
 //${RFPercentage(16)}px;
@@ -15,6 +16,20 @@ border-radius: 5px;
 
 padding: 17px 24px;;
 margin-bottom: 16px;
+`
+export const Header = styled.View`
+flex-direction: row;
+justify-content: space-between;
+`
+export const Button = styled.TouchableOpacity`
+width: ${RFValue(25)}px; 
+height: ${RFValue(25)}px;
+
+`;
+export const IconOptions = styled(SimpleLineIcons)`
+margin-left:  ${RFValue(15)}px; 
+font-size: ${RFValue(12)}px; 
+color: ${({theme}) => theme.colors.text_dark};
 `
 
 export const Title = styled.Text`
@@ -57,3 +72,4 @@ export const Category = styled.View`
 flex-direction:  row;
 align-items: center;
 `
+
