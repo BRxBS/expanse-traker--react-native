@@ -3,7 +3,8 @@ export declare global {
         interface RootParamList{
             Listagem: undefined;
             Register: undefined;
-            Resume:undefined
+            Resume:undefined;
+            EditScreen:undefined
             
         }
     }
