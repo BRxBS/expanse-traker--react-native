@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { categorias } from "../../utils/categorias";
+import { View, Modal, Text } from "react-native";
+import { Content } from "../ModalContent";
 
 import {
      Container,
+     Header,
+     Button, 
+     IconOptions,
      Icon,
      Title,
      Footer,
      Amount,
      CategoryName,
      Date,
-     Category
+     Category,
+
  
  } from "./styles";
 
@@ -30,18 +36,46 @@ data: TransactionCardProps
 
 
  export function TransactionCard({data}: Props): JSX.Element{
+const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
+
     const [ category ] = categorias.filter(
         (item) => item.key === data.category
     );
-    
+
+    function handleOpenSelectCategoryModal(){
+        setCategoryModalOpen(true);
+      }
+
+      function handleCloseSelectCategoryModal(){
+        setCategoryModalOpen(false);
+      }
     return(
         <Container>
+            <Header>
+            <View>
             <Title>{data.name}</Title>
 
             <Amount type={data.type}>        
             {data.type === "negative" && "- "}
             {data.amount}
-          </Amount>
+            </Amount>
+            </View>
+
+            <Button  onPress={handleOpenSelectCategoryModal}>
+            <Modal
+            animationType="none"
+            transparent={true}
+            visible={categoryModalOpen}
+            >
+                <Content
+                onPress={handleCloseSelectCategoryModal}
+                />
+
+            </Modal>
+            <IconOptions name="options-vertical"/>
+            </Button>
+
+            </Header>
 
             <Footer>
          
