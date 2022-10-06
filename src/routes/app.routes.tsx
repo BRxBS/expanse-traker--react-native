@@ -71,21 +71,6 @@ export function AppRoutes(){
             }}
             />
             
-            <Tab.Screen
-            name="EditScreen"
-            component={EditScreen}
-            options={{
-                tabBarIcon: (({size, color}) => (
-                    <MaterialIcons
-                    name="pie-chart"
-                    size={size}
-                    color={color}
-                    />
-                )),
-                headerShown: false
-            }}
-            
-            />
         </Tab.Navigator>
     )
 }
