@@ -21,7 +21,7 @@ export const Header = styled.View`
 flex-direction: row;
 justify-content: space-between;
 `
-export const Button = styled.TouchableOpacity`
+export const ButtonToOpenModal = styled.TouchableOpacity`
 width: ${RFValue(25)}px; 
 height: ${RFValue(25)}px;
 
