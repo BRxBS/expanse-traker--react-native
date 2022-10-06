@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { Entypo } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons'; 
 
 
 export const Container = styled.View`
@@ -99,4 +100,23 @@ margin-bottom: ${RFPercentage(1)}px;
 `
 export const LoadingCont = styled.View`
 
+`
+
+export const Wrapper = styled.TouchableOpacity`
+margin-bottom: 5px;
+padding: ${RFValue(15)}px ;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+
+`
+export const ModalText = styled.Text`
+font-size: ${RFValue(18)}px; 
+flex-direction: row;
+justify-content: space-between;
+
+`
+export const CloseIcon = styled(FontAwesome)`
+font-size: ${RFValue(20)}px; 
+color: ${({theme}) => theme.colors.text_dark};
 `
