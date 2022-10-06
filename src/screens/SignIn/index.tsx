@@ -19,12 +19,6 @@ import { SignInButton } from "../../components/SignSocialButton";
 import {useAuth} from '../../hooks/auth'
 import { ActivityIndicator, Alert } from "react-native";
 
-interface Props {
- title: string,
-
-};
-
-
 export function SignIn(){
     const [isLoading, setIsLoading] = useState(false)
 
