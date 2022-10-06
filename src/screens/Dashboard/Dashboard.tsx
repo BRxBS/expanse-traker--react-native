@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { HighlightCard } from "../../components/HighlightCard";
 import { TransactionCard, TransactionCardProps } from "../../components/TransactionCard";
 import { FlatList } from 'react-native';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { View, Modal, Text } from "react-native";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useTheme } from "styled-components";
@@ -21,9 +22,13 @@ import {
     Icon,
     Transactions,
     Title,
-    LoadingCont
+    LoadingCont,
+    Wrapper,
+    ModalText,
+    CloseIcon
 
  } from "./styles";
+import { Content } from "../../components/ModalContent";
 
 export interface DataListProps extends TransactionCardProps{
     id: string;
@@ -42,6 +47,7 @@ export interface DataListProps extends TransactionCardProps{
 
 export function Dashboard(){
     const [isLoading, setIsLoading] = useState(true)
+    const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
     const [transaction, setTransaction] = useState<DataListProps[]>([])
     const [highlightData, setHighlightData] = useState<HighlightDataProps>(
         {} as HighlightDataProps
@@ -49,8 +55,20 @@ export function Dashboard(){
       
       const theme = useTheme()
       const {user, signOut} = useAuth()
-      
-      const dataKey = `@finance:transactions_user:${user.id}`;
+
+      const {getItem, setItem} = useAsyncStorage(`@finance:transactions_user:${user.id}`)
+
+
+      function handleOpenSelectCategoryModal(){
+        setCategoryModalOpen(true);
+      }
+
+
+    function handleCloseSelectCategoryModal(){
+        setCategoryModalOpen(false);
+      }
+
+
       
       function getLastTransactionDate(
         collection: DataListProps[],
@@ -78,7 +96,7 @@ export function Dashboard(){
     
     async function loadTransactions(){
 
-        const response = await AsyncStorage.getItem(dataKey)
+        const response = await getItem()
         const transactions = response ? JSON.parse(response) : [];
         console.log('response', response)
     
@@ -173,10 +191,27 @@ export function Dashboard(){
 //    console.log('HighlightData,', highlightData)
 //   console.log('transaction,', transaction)
 
+async function handleDeleteRegister(id: string){
+  const response = await getItem()
+  const previosData = response ? JSON.parse(response) : []; 
+
+
+  const dataStorage = previosData.filter((item: DataListProps) => item.id !== id);
+  setItem(JSON.stringify(dataStorage))
+  console.log('dataStorage', dataStorage)
+  setCategoryModalOpen(false)
+
+
+}
 
     useFocusEffect(useCallback(() => {
         loadTransactions()
+
     },[]))
+
+    useEffect(()=> {
+      loadTransactions()
+    },[categoryModalOpen])
 
     return(
 
@@ -234,13 +269,33 @@ export function Dashboard(){
             <FlatList
                         data={transaction}
                         keyExtractor={(item) => String(item.id)}
-                        renderItem={({item}) => <TransactionCard data={item} />}
+                        renderItem={({item}) => <> 
+                        <TransactionCard data={item} onPress={handleOpenSelectCategoryModal} />
+
+                        <Modal
+                        animationType="none"
+                        transparent={true}
+                        visible={categoryModalOpen}
+                        >
+                        <Content
+                          closeModalFunction={handleCloseSelectCategoryModal}
+                            >
+                          <Wrapper onPress={() => handleDeleteRegister(item.id)}>
+                         <ModalText>Excluir Registro </ModalText>
+                         <CloseIcon name="trash-o" />
+                         </Wrapper>
+                            </Content>
+            
+                        </Modal>
+                        </>
+                      }
                         showsVerticalScrollIndicator= {false}
-                       
+                        inverted={true}
             >
 
             </FlatList>
             
+
 
             </Transactions>
 </>
