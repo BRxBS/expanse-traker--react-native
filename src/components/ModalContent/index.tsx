@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import {
     Container,
@@ -13,28 +13,34 @@ import {
 
 } from "./styles";
 
+import { TransactionCardProps } from '../TransactionCard';
+
 interface Props{
-onPress: () => void;
+
+closeModalFunction: () => void;
+children: ReactNode
+
 }
 
-export function Content({onPress}: Props){
+
+export function Content({closeModalFunction, children}: Props){
+
+
+
+
     return(
         <Container>
         
         <ModalContent>
+            {children}
 
         <Wrapper>
         <ModalText>Editar Registro  </ModalText>
         <EditIcon  name="edit"/>
         </Wrapper>
 
-        <Wrapper>
-             <ModalText>Excluir Registro </ModalText>
-             <CloseIcon name="close" />
-
-        </Wrapper>
         
-        <CloseButton onPress={onPress} >
+        <CloseButton onPress={closeModalFunction} >
         <ButtonText>
             Fechar
         </ButtonText>
