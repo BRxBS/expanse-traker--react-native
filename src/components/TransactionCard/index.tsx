@@ -3,10 +3,12 @@ import { categorias } from "../../utils/categorias";
 import { View, Modal, Text } from "react-native";
 import { Content } from "../ModalContent";
 
+import AsyncStorage, { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import {useAuth} from '../../hooks/auth'
 import {
      Container,
      Header,
-     Button, 
+     ButtonToOpenModal, 
      IconOptions,
      Icon,
      Title,
@@ -30,25 +32,18 @@ export interface TransactionCardProps {
 
 
 interface Props {
-data: TransactionCardProps
+data: TransactionCardProps;
+onPress:  () => void;
+
 }
 
+ export function TransactionCard({data, onPress}: Props): JSX.Element{
 
-
- export function TransactionCard({data}: Props): JSX.Element{
-const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
-
-    const [ category ] = categorias.filter(
+const [ category ] = categorias.filter(
         (item) => item.key === data.category
     );
 
-    function handleOpenSelectCategoryModal(){
-        setCategoryModalOpen(true);
-      }
 
-      function handleCloseSelectCategoryModal(){
-        setCategoryModalOpen(false);
-      }
     return(
         <Container>
             <Header>
@@ -61,19 +56,10 @@ const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
             </Amount>
             </View>
 
-            <Button  onPress={handleOpenSelectCategoryModal}>
-            <Modal
-            animationType="none"
-            transparent={true}
-            visible={categoryModalOpen}
-            >
-                <Content
-                onPress={handleCloseSelectCategoryModal}
-                />
+            <ButtonToOpenModal  onPress={onPress}>
 
-            </Modal>
             <IconOptions name="options-vertical"/>
-            </Button>
+            </ButtonToOpenModal>
 
             </Header>
 
