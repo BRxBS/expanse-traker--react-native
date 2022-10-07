@@ -5,7 +5,7 @@ import { FlatList } from 'react-native';
 import { View, Modal, Text } from "react-native";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { ActivityIndicator } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useTheme } from "styled-components";
 import {useAuth} from '../../hooks/auth'
 import { 
@@ -25,7 +25,9 @@ import {
     LoadingCont,
     Wrapper,
     ModalText,
-    CloseIcon
+    CloseIcon,
+    EditIcon,
+    ButtonNavigate
 
  } from "./styles";
 import { Content } from "../../components/ModalContent";
@@ -45,6 +47,7 @@ export interface DataListProps extends TransactionCardProps{
 
   }
 
+
 export function Dashboard(){
     const [isLoading, setIsLoading] = useState(true)
     const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
@@ -53,6 +56,7 @@ export function Dashboard(){
         {} as HighlightDataProps
       );
       
+      const navigation = useNavigation()
       const theme = useTheme()
       const {user, signOut} = useAuth()
 
@@ -68,9 +72,14 @@ export function Dashboard(){
         setCategoryModalOpen(false);
       }
 
-
+    // function handleOpenScreenEdit(){
+    //   return (
+ 
+    //         navigation.navigate('EditScreen')
+    //         )
+    // }
       
-      function getLastTransactionDate(
+    function getLastTransactionDate(
         collection: DataListProps[],
         type: "positive" | "negative"
       ) {
@@ -280,6 +289,11 @@ async function handleDeleteRegister(id: string){
                         <Content
                           closeModalFunction={handleCloseSelectCategoryModal}
                             >
+                          {/* <Wrapper>
+                         <ModalText>Editar Registro  </ModalText>
+                         <EditIcon  name="edit"/>
+                         </Wrapper> */}
+
                           <Wrapper onPress={() => handleDeleteRegister(item.id)}>
                          <ModalText>Excluir Registro </ModalText>
                          <CloseIcon name="trash-o" />
