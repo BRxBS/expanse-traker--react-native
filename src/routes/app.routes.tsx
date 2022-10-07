@@ -7,7 +7,6 @@ import {MaterialIcons} from '@expo/vector-icons'
 import { Dashboard } from "../screens/Dashboard/Dashboard";
 import { Register } from "../screens/Register";
 import { Resume } from "../screens/Resume";
-import { EditScreen } from "../screens/Edit";
 
 const Tab = createBottomTabNavigator();
 
