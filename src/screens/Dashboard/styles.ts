@@ -120,3 +120,10 @@ export const CloseIcon = styled(FontAwesome)`
 font-size: ${RFValue(20)}px; 
 color: ${({theme}) => theme.colors.text_dark};
 `
+export const EditIcon = styled(FontAwesome)`
+font-size: ${RFValue(20)}px; 
+color: ${({theme}) => theme.colors.text_dark};
+`
+export const ButtonNavigate = styled.TouchableOpacity`
+
+`
