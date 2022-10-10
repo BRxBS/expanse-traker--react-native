@@ -3,10 +3,13 @@ import {Platform} from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useTheme } from "styled-components";
 import {MaterialIcons} from '@expo/vector-icons'
-
 import { Dashboard } from "../screens/Dashboard/Dashboard";
 import { Register } from "../screens/Register";
 import { Resume } from "../screens/Resume";
+import { EditScreen } from '../screens/Edit';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const {Navigator, Screen} = createStackNavigator();
 
 const Tab = createBottomTabNavigator();
 
@@ -69,6 +72,16 @@ export function AppRoutes(){
                 headerShown: false
             }}
             />
+                        <Tab.Screen
+            name="EditScreen"
+            component={EditScreen}
+            options={{
+                tabBarButton: () => null,
+                headerShown: false
+              }}
+            />
+            
+
             
         </Tab.Navigator>
     )
