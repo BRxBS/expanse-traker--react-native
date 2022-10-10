@@ -109,6 +109,7 @@ async  function handleRegister({ name, amount }: FormData){
             key: "category",
             name: "Categoria",
           })
+          // error: it's waiting for the params
           navigation.navigate('Listagem')
      
         }catch(error) {
