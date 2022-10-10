@@ -1,10 +1,21 @@
 export declare global {
     namespace ReactNavigation{
-        interface RootParamList{
-            Listagem: undefined;
+  export   interface RootParamList{
+            Listagem:  {
+                params: object;
+                merge: boolean
+            };
             Register: undefined;
             Resume:undefined;
-            EditScreen:undefined
+            EditScreen: {
+                id: string;
+                type: 'positive' | 'negative';
+                name: string;
+                amount: string;
+                category: string ;
+
+
+            }
             
         }
     }
