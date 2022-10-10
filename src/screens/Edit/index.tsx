@@ -26,10 +26,26 @@ import {
 import { CategorySelect } from "../CategorySelect";
 import { useAuth } from "../../hooks/auth";
 
+import type { StackScreenProps } from '@react-navigation/stack';
+type StackParamList = {
+  Listagem:  {
+    params: object;
+    merge: boolean;
+    id: string;
+    type: 'positive' | 'negative';
+    name: string;
+    amount: string;
+    date: string;
+}
+}
+
+type Props = StackScreenProps<StackParamList, 'Listagem'>;
+
 interface FormData {
   name: string;
   amount: string
 }
+
 
 const schema = yup.object().shape({
   name: yup.string()
@@ -40,7 +56,11 @@ const schema = yup.object().shape({
   .required('Nome é obrigatorio'),
 })
 
-export function EditScreen(){
+export function EditScreen({ route }: Props){
+
+  const { id, name, amount, type, } = route.params;
+
+   const [data, setData] = useState({})
 
     const [transactionType, setTransactionType] = useState('');
     const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
@@ -76,32 +96,25 @@ export function EditScreen(){
         setCategoryModalOpen(false);
       }
 
-async  function handleRegister({ name, amount }: FormData){
-        const dataKey = `@finance:transactions_user:${user.id}`;
-        if(!transactionType)
-        return Alert.alert("Selecione o tipo da transação")
+async  function handleRegister(){
 
-        if(category.key === 'category')
-        return Alert.alert("Selecione a categoria")
+  if(category.key === 'category')
+  return Alert.alert("Selecione a categoria")
 
-
-        const newTransaction = {
-          id: String(uuid.v4()),
+     const newTransaction = {
+          id,
           name,
           amount,
           type: transactionType,
           category: category.key,
           date: new Date()
         };
+        // data undefined
+        console.log('newTransaction EditScreen',newTransaction)
+        setData(newTransaction)
 
         try{
-
-          const data = await AsyncStorage.getItem(dataKey)
-          const currentData = data ? JSON.parse(data) : [];
-          const dataFormatted = [  ...currentData, newTransaction]
-          
-          await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormatted))
-         
+      
           //to clean the input filds
           reset()
           setTransactionType(''),
@@ -109,7 +122,10 @@ async  function handleRegister({ name, amount }: FormData){
             key: "category",
             name: "Categoria",
           })
-          navigation.navigate('Listagem')
+          navigation.navigate('Listagem', {
+            params: {data: data},
+            merge:true
+          })
      
         }catch(error) {
           console.log("erro em salvar transação", error);
