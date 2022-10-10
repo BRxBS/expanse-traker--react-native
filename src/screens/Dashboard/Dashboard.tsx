@@ -31,9 +31,19 @@ import {
 
  } from "./styles";
 import { Content } from "../../components/ModalContent";
+import { EditScreen } from "../Edit";
 
 export interface DataListProps extends TransactionCardProps{
     id: string;
+  }
+
+  type NavigationProps = {
+    id: string;
+    type: 'positive' | 'negative';
+    name: string;
+    amount: string;
+    category: string ;
+    date: string;
   }
 
   interface HighlightProps {
@@ -47,10 +57,28 @@ export interface DataListProps extends TransactionCardProps{
 
   }
 
+  
+import type { StackScreenProps } from '@react-navigation/stack';
 
-export function Dashboard(){
+type StackParamList = {
+  EditScreen: {
+    id: string;
+    type: 'positive' | 'negative';
+    name: string;
+    amount: string;
+    category: string ;
+
+}
+}
+
+type Props = StackScreenProps<StackParamList, 'EditScreen'>;
+
+
+export function Dashboard() {
     const [isLoading, setIsLoading] = useState(true)
     const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
+    const [openEdit, setOpentEdit] = useState(false)
+
     const [transaction, setTransaction] = useState<DataListProps[]>([])
     const [highlightData, setHighlightData] = useState<HighlightDataProps>(
         {} as HighlightDataProps
@@ -62,7 +90,6 @@ export function Dashboard(){
 
       const {getItem, setItem} = useAsyncStorage(`@finance:transactions_user:${user.id}`)
 
-
       function handleOpenSelectCategoryModal(){
         setCategoryModalOpen(true);
       }
@@ -71,14 +98,7 @@ export function Dashboard(){
     function handleCloseSelectCategoryModal(){
         setCategoryModalOpen(false);
       }
-
-    // function handleOpenScreenEdit(){
-    //   return (
- 
-    //         navigation.navigate('EditScreen')
-    //         )
-    // }
-      
+  
     function getLastTransactionDate(
         collection: DataListProps[],
         type: "positive" | "negative"
@@ -107,7 +127,7 @@ export function Dashboard(){
 
         const response = await getItem()
         const transactions = response ? JSON.parse(response) : [];
-        console.log('response', response)
+        // console.log('response', response)
     
         let entriesTotal = 0;
         let expensiveTotal = 0;
@@ -146,8 +166,8 @@ export function Dashboard(){
             }
         })
        setTransaction(transactionFormatted);
-       console.log('transactionFormatted', transactionFormatted)
-       console.log('loadTransactions', loadTransactions)
+      //  console.log('transactionFormatted', transactionFormatted)
+
 
          
        const lastTransactionsEntries = getLastTransactionDate(
@@ -197,17 +217,36 @@ export function Dashboard(){
     });
     setIsLoading(false);
   }
-//    console.log('HighlightData,', highlightData)
-//   console.log('transaction,', transaction)
+
+  
+  async function handleOpenScreenEdit({id, name, amount, type, category,}: NavigationProps){
+    setCategoryModalOpen(false);
+
+  const response = await getItem()
+  const previosData = response ? JSON.parse(response) : []; 
+
+  const dataStorage = previosData.find((item: DataListProps) => item.id !== id);
+  console.log("handleOpenScreen id", dataStorage)
+
+  navigation.navigate('EditScreen',{
+  id: id,
+  name: name,
+  type: type,
+  amount:amount,
+  category:category,
+
+  })
+
+}
+
 
 async function handleDeleteRegister(id: string){
   const response = await getItem()
   const previosData = response ? JSON.parse(response) : []; 
 
-
   const dataStorage = previosData.filter((item: DataListProps) => item.id !== id);
   setItem(JSON.stringify(dataStorage))
-  console.log('dataStorage', dataStorage)
+  // console.log('dataStorage', dataStorage)
   setCategoryModalOpen(false)
 
 
@@ -288,11 +327,11 @@ async function handleDeleteRegister(id: string){
                         >
                         <Content
                           closeModalFunction={handleCloseSelectCategoryModal}
-                            >
-                          {/* <Wrapper>
+                        >
+                          <Wrapper onPress={handleOpenScreenEdit}>
                          <ModalText>Editar Registro  </ModalText>
                          <EditIcon  name="edit"/>
-                         </Wrapper> */}
+                         </Wrapper>
 
                           <Wrapper onPress={() => handleDeleteRegister(item.id)}>
                          <ModalText>Excluir Registro </ModalText>
