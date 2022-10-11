@@ -5,7 +5,7 @@ import { FlatList } from 'react-native';
 import { View, Modal, Text } from "react-native";
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { ActivityIndicator } from "react-native";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { useTheme } from "styled-components";
 import {useAuth} from '../../hooks/auth'
 import { 
@@ -59,6 +59,7 @@ export interface DataListProps extends TransactionCardProps{
 
   
 import type { StackScreenProps } from '@react-navigation/stack';
+import { preventAutoHideAsync } from "expo-splash-screen";
 
 type StackParamList = {
   EditScreen: {
@@ -74,10 +75,10 @@ type StackParamList = {
 type Props = StackScreenProps<StackParamList, 'EditScreen'>;
 
 
-export function Dashboard() {
+export function Dashboard({ route }: Props) {
     const [isLoading, setIsLoading] = useState(true)
     const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
-    const [openEdit, setOpentEdit] = useState(false)
+    const [DataObject, setDataObject] = useState({})
 
     const [transaction, setTransaction] = useState<DataListProps[]>([])
     const [highlightData, setHighlightData] = useState<HighlightDataProps>(
@@ -88,7 +89,10 @@ export function Dashboard() {
       const theme = useTheme()
       const {user, signOut} = useAuth()
 
-      const {getItem, setItem} = useAsyncStorage(`@finance:transactions_user:${user.id}`)
+      // const routes = useRoute()
+      // console.log('routes.params.Dashboard', routes.params)
+
+      const {getItem, setItem, removeItem} = useAsyncStorage(`@finance:transactions_user:${user.id}`)
 
       function handleOpenSelectCategoryModal(){
         setCategoryModalOpen(true);
@@ -219,7 +223,7 @@ export function Dashboard() {
   }
 
   
-  async function handleOpenScreenEdit({id, name, amount, type, category,}: NavigationProps){
+  async function handleOpenScreenEdit(id: string, name:string, amount: string){
     setCategoryModalOpen(false);
 
   const response = await getItem()
@@ -227,18 +231,30 @@ export function Dashboard() {
 
   const dataStorage = previosData.find((item: DataListProps) => item.id !== id);
   console.log("handleOpenScreen id", dataStorage)
+  console.log('oi')
 
-  navigation.navigate('EditScreen',{
-  id: id,
-  name: name,
-  type: type,
-  amount:amount,
-  category:category,
+  navigation.navigate('EditScreen', {id:id,
+                                     name: name,
+                                     amount:amount
+                                 })
 
-  })
+                                     
 
 }
 
+async function updateEditData(){
+  const { id, name, amount} = await route.params;
+  setDataObject({
+    id,
+    name,
+    amount,
+  })
+  console.log('DataObject', DataObject)
+  // setItem(JSON.stringify(DataObject))
+
+
+ 
+}
 
 async function handleDeleteRegister(id: string){
   const response = await getItem()
@@ -246,7 +262,6 @@ async function handleDeleteRegister(id: string){
 
   const dataStorage = previosData.filter((item: DataListProps) => item.id !== id);
   setItem(JSON.stringify(dataStorage))
-  // console.log('dataStorage', dataStorage)
   setCategoryModalOpen(false)
 
 
@@ -259,7 +274,10 @@ async function handleDeleteRegister(id: string){
 
     useEffect(()=> {
       loadTransactions()
+      updateEditData()
     },[categoryModalOpen])
+
+    // console.log('transaction,', transaction)
 
     return(
 
@@ -328,7 +346,7 @@ async function handleDeleteRegister(id: string){
                         <Content
                           closeModalFunction={handleCloseSelectCategoryModal}
                         >
-                          <Wrapper onPress={handleOpenScreenEdit}>
+                          <Wrapper onPress={() => handleOpenScreenEdit(item.id, item.name, item.amount)}>
                          <ModalText>Editar Registro  </ModalText>
                          <EditIcon  name="edit"/>
                          </Wrapper>
