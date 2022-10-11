@@ -1,16 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import { Modal, 
         TouchableWithoutFeedback,
         Keyboard,
         Alert } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useForm } from 'react-hook-form'
-import * as yup from "yup";
-import { yupResolver } from '@hookform/resolvers/yup'
-import uuid from 'react-native-uuid'
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-import { InputFormHook } from "../../components/Form/inputFormHook";
+
 import { Button } from "../../components/Form/button";
 import { TransactionTypeButton } from "../../components/Form/TransactionTypeButton";
 import { CategorySelectButton } from "../../components/Form/CategorySelectButton";
@@ -21,10 +16,10 @@ import {
     Title,
     Form,
     Fild,
-    TransactionsTypes
+    TransactionsTypes,
+    TextInput
 } from './styles'
 import { CategorySelect } from "../CategorySelect";
-import { useAuth } from "../../hooks/auth";
 
 import type { StackScreenProps } from '@react-navigation/stack';
 type StackParamList = {
@@ -36,53 +31,35 @@ type StackParamList = {
     name: string;
     amount: string;
     date: string;
+    category: string;
 }
 }
 
 type Props = StackScreenProps<StackParamList, 'Listagem'>;
 
-interface FormData {
-  name: string;
-  amount: string
-}
-
-
-const schema = yup.object().shape({
-  name: yup.string()
-  .required('Nome é obrigatorio'),
-  amount: yup.number()
-  .typeError('Informe um valor númerico')
-  .positive('O valor não pode ser negativo')
-  .required('Nome é obrigatorio'),
-})
-
 export function EditScreen({ route }: Props){
 
-  const { id, name, amount, type, } = route.params;
+  const { id, name, amount, } = route.params;
+  console.log('id', id, '', 'name', name, 'amount', amount )
+  const routes = useRoute()
+  console.log('routes.params', routes.params)
 
-   const [data, setData] = useState({})
+   const [dataName, setDataName] = useState('')
+   const [dataAmount, setDataAmount] = useState('')
+
 
     const [transactionType, setTransactionType] = useState('');
     const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
 
-    const {user} = useAuth()
-
     const navigation = useNavigation()
 
-    const {
-      control,
-      handleSubmit,
-      reset,
-      formState: {errors}
-    } = useForm({
-      resolver: yupResolver(schema)
-    });
 
 
-    const [category, setCategory] = useState({
-        key: "category",
-        name: "Categoria",
-      });
+
+    // const [Category, setCategory] = useState({
+    //     key: "category",
+    //     name: "Categoria",
+    //   });
 
       function handleTransactionTypeSelect(type: "positive" | "negative"){
         setTransactionType(type)
@@ -96,41 +73,25 @@ export function EditScreen({ route }: Props){
         setCategoryModalOpen(false);
       }
 
-async  function handleRegister(){
+      const resgister = () => {
 
-  if(category.key === 'category')
-  return Alert.alert("Selecione a categoria")
-
-     const newTransaction = {
-          id,
-          name,
-          amount,
-          type: transactionType,
-          category: category.key,
-          date: new Date()
-        };
-        // data undefined
-        console.log('newTransaction EditScreen',newTransaction)
-        setData(newTransaction)
-
+        navigation.navigate('Listagem',
+        {id:id,
+         name: dataName,
+         amount:dataAmount,
+}
+        )
         try{
-      
           //to clean the input filds
-          reset()
-          setTransactionType(''),
-          setCategory({
-            key: "category",
-            name: "Categoria",
-          })
-          navigation.navigate('Listagem', {
-            params: {data: data},
-            merge:true
-          })
-     
+          setDataName(''),
+          setDataAmount(''),
+          setTransactionType('')
+  
         }catch(error) {
           console.log("erro em salvar transação", error);
           Alert.alert("Não foi possível salvar")
         }
+
       }
 
 
@@ -147,22 +108,15 @@ async  function handleRegister(){
             <Form>
             <Fild>
 
-            <InputFormHook
-            name='name'
-            control={control}
-            placeholder='Nome'
-            autoCapitalize="sentences"
-            autoCorrect={false}
-            error={errors.name?.message}
-            />
 
-            <InputFormHook
-            name='amount'
-            control={control}
-            placeholder='Valor'
-            keyboardType="numeric"
-            error={errors.amount?.message}
-            />
+            <TextInput
+                    placeholder={name}
+                    onChangeText={setDataName}
+                    value={dataName} />
+            <TextInput
+                    placeholder={amount}
+                    onChangeText={setDataAmount}
+                    value={dataAmount} />
 
 
         <TransactionsTypes>
@@ -181,25 +135,13 @@ async  function handleRegister(){
         />
         </TransactionsTypes>
 
-        <CategorySelectButton 
-        title={category.name}
-        onPress={handleOpenSelectCategoryModal}
-        />
 
   
             </Fild>
 
-            <Button title="Enviar" onPress={handleSubmit(handleRegister)}/>
+            <Button title="Enviar" onPress={resgister}/>
             </Form>
             
-            <Modal visible={categoryModalOpen}>
-             
-          <CategorySelect
-            category={category}
-            setCategory={setCategory}
-            closeSelectCategory={handleCloseSelectCategoryModal}
-          />
-        </Modal>
         </Container>
         </TouchableWithoutFeedback>
         </>
