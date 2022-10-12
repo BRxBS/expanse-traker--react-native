@@ -37,14 +37,6 @@ export interface DataListProps extends TransactionCardProps{
     id: string;
   }
 
-  type NavigationProps = {
-    id: string;
-    type: 'positive' | 'negative';
-    name: string;
-    amount: string;
-    category: string ;
-    date: string;
-  }
 
   interface HighlightProps {
     amount: string;
@@ -61,7 +53,7 @@ export interface DataListProps extends TransactionCardProps{
 import type { StackScreenProps } from '@react-navigation/stack';
 import { preventAutoHideAsync } from "expo-splash-screen";
 
-type StackParamList = {
+/*type StackParamList = {
   EditScreen: {
     id: string;
     type: 'positive' | 'negative';
@@ -73,12 +65,12 @@ type StackParamList = {
 }
 
 type Props = StackScreenProps<StackParamList, 'EditScreen'>;
+*/
 
-
-export function Dashboard({ route }: Props) {
+export function Dashboard() {
     const [isLoading, setIsLoading] = useState(true)
     const [categoryModalOpen, setCategoryModalOpen] = useState<boolean>(false);
-    const [DataObject, setDataObject] = useState({})
+   // const [DataObject, setDataObject] = useState({})
 
     const [transaction, setTransaction] = useState<DataListProps[]>([])
     const [highlightData, setHighlightData] = useState<HighlightDataProps>(
@@ -223,7 +215,7 @@ export function Dashboard({ route }: Props) {
   }
 
   
-  async function handleOpenScreenEdit(id: string, name:string, amount: string){
+ /* async function handleOpenScreenEdit(id: string, name:string, amount: string){
     setCategoryModalOpen(false);
 
   const response = await getItem()
@@ -242,7 +234,7 @@ export function Dashboard({ route }: Props) {
 
 }
 
-async function updateEditData(){
+  async function updateEditData(){
   const { id, name, amount} = await route.params;
   setDataObject({
     id,
@@ -251,10 +243,10 @@ async function updateEditData(){
   })
   console.log('DataObject', DataObject)
   // setItem(JSON.stringify(DataObject))
-
+*/
 
  
-}
+
 
 async function handleDeleteRegister(id: string){
   const response = await getItem()
@@ -274,10 +266,9 @@ async function handleDeleteRegister(id: string){
 
     useEffect(()=> {
       loadTransactions()
-      updateEditData()
+ //     updateEditData()
     },[categoryModalOpen])
 
-    // console.log('transaction,', transaction)
 
     return(
 
@@ -346,10 +337,10 @@ async function handleDeleteRegister(id: string){
                         <Content
                           closeModalFunction={handleCloseSelectCategoryModal}
                         >
-                          <Wrapper onPress={() => handleOpenScreenEdit(item.id, item.name, item.amount)}>
+                         {/* <Wrapper onPress={() => handleOpenScreenEdit(item.id, item.name, item.amount)}>
                          <ModalText>Editar Registro  </ModalText>
                          <EditIcon  name="edit"/>
-                         </Wrapper>
+                          </Wrapper>*/}
 
                           <Wrapper onPress={() => handleDeleteRegister(item.id)}>
                          <ModalText>Excluir Registro </ModalText>
