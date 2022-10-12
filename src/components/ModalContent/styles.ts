@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import { RFValue } from "react-native-responsive-fontsize";
 import { FontAwesome } from '@expo/vector-icons'; 
 
 export const Container = styled.View`
@@ -11,12 +11,12 @@ align-items: center;
 `
 
 export const ModalContent = styled.View`
-padding:${RFValue(18)}px; 
+padding:${RFValue(8)}px; 
 
-width: 70%;
-height: 30%;
+width: 65%;
+height: 22%;
 background-color: ${({theme}) => theme.colors.shape};
-border-radius: 8px;
+border-radius: 10px;
 
 justify-content: center;
 align-items: center;
@@ -29,6 +29,7 @@ export const ModalText = styled.Text`
 font-size: ${RFValue(18)}px; 
 flex-direction: row;
 justify-content: space-between;
+margin-bottom: ${RFValue(10)}px; 
 
 `
 export const Wrapper = styled.TouchableOpacity`
@@ -56,7 +57,7 @@ background-color: ${({theme}) => theme.colors.secundary};
 justify-content: center;
 align-items: center;
 height: 30%;
-width: 70%;
+width: 60%;
 margin-top: ${RFValue(8)}px; 
 
 `
@@ -65,7 +66,7 @@ export const ButtonText = styled.Text`
 color:  ${({theme}) => theme.colors.background};
 font-family:  ${({theme}) => theme.fonts.medium};
 
-padding: ${RFValue(15)}px ;
+padding: ${RFValue(3)}px ;
 font-size: ${RFValue(15)}px; 
 
 
