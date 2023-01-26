@@ -6,3 +6,5 @@ export const categorias = [
     {key: 'studies', name: 'Estudos', icon: 'book', color: '#26195c'},
     {key: 'other', name: 'Outro', icon: 'plus', color: '#9c001a'}, //import { AntDesign } from '@expo/vector-icons';
 ]
+
+// npx expo start --no-dev
